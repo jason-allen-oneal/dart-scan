@@ -1,5 +1,5 @@
 # dart-scan
-My first Dart application: a simppe TCP port scanner.  
+My first Dart application: a simple TCP port scanner.  
 
 __Usage__
 ```
