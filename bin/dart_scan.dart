@@ -7,9 +7,25 @@ import 'package:dart_scan/scanner.dart';
 
 void main(List<String> arguments) async {
 	final parser = ArgParser()
-		..addOption('host', mandatory: true, abbr: 'H')
-		..addOption('ports', mandatory: true, abbr: 'p');
+		..addFlag('help', abbr: 'h', help: 'Display this help menu.')
+		..addOption('host', defaultsTo: '', abbr: 'H', help: 'The host which to scan. Must be a FQDN or IP address.')
+		..addOption('ports', defaultsTo: '', abbr: 'p', help: 'The port or ports to scan on the host. Can be a single port, comma-separated list of ports, or a range of ports.');
 	var opts = parser.parse(arguments);
+	
+	if(opts['help']){
+		print(parser.usage);
+		exit(2);
+	}
+	
+	if(opts['host'] == ''){
+		print('	You must specify a host domain name or IP.');
+		exit(2);
+	}
+	
+	if(opts['ports'] == ''){
+		print('	You must specify a port, comma-separated list of ports, or range of ports.');
+		exit(2);
+	}
 	
 	InternetAddress ip = await getIP(opts['host']);
 	
@@ -37,7 +53,7 @@ void main(List<String> arguments) async {
 			int closedCt = closedPorts.length;
 			
 			print(' ');
-			print('Found {$closedCt} closed ports.');
+			print('Found $closedCt closed ports.');
 			print('Found open ports:');
 			
 			openPorts.forEach((port) {
